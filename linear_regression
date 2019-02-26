@@ -1,0 +1,56 @@
+x=[1;2;4;0];
+y=[0.5;1;2;0];
+plot(x,y,'o');
+title("Sample data");
+xlabel("x");
+ylabel("y");
+
+
+alp=0.1;          % learning rate
+err=1;            % stopping criterion error err<epsilon
+iter=1;% to keep track of loop
+
+% Mean Square Error
+m=4;
+w0=1;
+w1=1;       % randowm values for weights
+S=sum((y-w1*x-w0).^2);
+J(1)=(0.5/m)*S;
+
+
+clear iter;
+clear w0;
+clear w1;
+clear J
+iter=1;
+
+
+
+while(iter<100)
+    hold on
+    yh=w1*x + w0;
+    DJ0=(yh-y);
+    DJ1=(yh-y).*x;
+    dw0=-alp*sum(DJ0)/m;
+    dw1=-alp*sum(DJ1)/m;
+    w0=w0+dw0;
+    w1=w1+dw1;
+    iter=iter+1;
+    J(iter)=0.5/m*sum((y-w1*x-w0).^2);
+    err=abs(J(iter)-J(iter-1));
+    
+    subplot(211)
+    plot(x,y,'o',x,yh,'r');
+    xlabel('x')
+    ylabel('y')
+    legend({'Data','Linear Fit'},'Location', 'NorthWest')
+    drawnow;
+    
+    subplot(212)
+    plot([1:iter],J([1:iter]),'-o');
+    xlabel('iterations');
+    ylabel('J')
+    drawnow;
+    
+end
+
